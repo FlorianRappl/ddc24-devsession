@@ -1,0 +1,11 @@
+<Project Sdk="Piral.Blazor.Sdk/0.4.1">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.0</Version>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AppShell>C:\Users\florian\source\repos\ddc24-devsession\project\Flixx\Flixx\bin\Release\net8.0\publish</AppShell>
+	</PropertyGroup>
+
+</Project>

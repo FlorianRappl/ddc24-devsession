@@ -1,0 +1,115 @@
+﻿@page "/movies"
+@using Microsoft.JSInterop
+
+@inject IHttpClientFactory http
+@inject IJSRuntime js
+
+<section class="now-playing">
+    <h2>Now Playing</h2>
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            @foreach (var movie in nowPlaying)
+            {
+                <div class="swiper-slide">
+                    <a href="/movies/@movie.id">
+                        <img src="https://image.tmdb.org/t/p/w500@(movie.poster_path)" alt="@movie.title" />
+                    </a>
+                    <h4 class="swiper-rating">
+                        <i class="fas fa-star text-secondary"></i> @movie.vote_average / 10
+                    </h4>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<Piral.Blazor.Shared.MfComponent Name="search" />
+<section class="container">
+    <h2>Popular Movies</h2>
+    <div id="popular-movies" class="grid">
+        @foreach (var movie in popular)
+        {
+            <div class="card">
+                <a href="/movies/@movie.id">
+                    <img src="https://image.tmdb.org/t/p/w500@(movie.poster_path)" class="card-img-top" alt="@movie.title" />`
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@movie.title</h5>
+                    <p class="card-text">
+                        <small class="text-muted">Release: @movie.release_date</small>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@if (loading)
+{
+    <Spinner />
+}
+
+@code {
+    bool loading = true;
+    List<MovieItem> nowPlaying = new();
+    List<MovieItem> popular = new();
+
+    async Task LoadData()
+    {
+        var client = http.CreateClient();
+        var key = "3fd2be6f0c70a2a598f084ddfb75487c";
+        var responses = await Task.WhenAll(client.GetFromJsonAsync<MovieData>($"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US"), client.GetFromJsonAsync<MovieData>($"https://api.themoviedb.org/3/movie/now_playing?api_key={key}&language=en-US"));
+
+        await this.InvokeAsync(() =>
+        {
+            loading = false;
+            popular = responses[0].results;
+            nowPlaying = responses[1].results;
+            this.StateHasChanged();
+            js.InvokeVoidAsync("triggerSwipe");
+        });
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _ = LoadData();
+        return base.OnInitializedAsync();
+    }
+
+    class MovieItem
+    {
+        public bool adult { get; set; }
+
+        public string backdrop_path { get; set; }
+
+        public List<int> genre_ids { get; set; }
+
+        public int id { get; set; }
+
+        public string original_language { get; set; }
+
+        public string original_title { get; set; }
+
+        public string overview { get; set; }
+
+        public string poster_path { get; set; }
+
+        public string title { get; set; }
+
+        public string release_date { get; set; }
+
+        public double popularity { get; set; }
+
+        public double vote_average { get; set; }
+
+        public int vote_count { get; set; }
+
+        public bool video { get; set; }
+
+    }
+
+    class MovieData
+    {
+        public List<MovieItem> results { get; set; }
+
+    }
+}
