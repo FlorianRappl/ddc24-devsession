@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisneySharpDebugger", "DisneySharpDebugger\DisneySharpDebugger.csproj", "{A76E69FF-8A94-483B-A8B6-CEC33BA004A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisneySharpCatalog", "..\DisneySharpCatalog\DisneySharpCatalog\DisneySharpCatalog.csproj", "{D45436DE-E784-4F72-AB20-FEB61C684691}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisneySharpSearch", "..\DisneySharpSearch\DisneySharpSearch\DisneySharpSearch.csproj", "{F24E43A8-F8C3-431F-9E86-A6724CDE6CED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A76E69FF-8A94-483B-A8B6-CEC33BA004A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A76E69FF-8A94-483B-A8B6-CEC33BA004A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A76E69FF-8A94-483B-A8B6-CEC33BA004A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A76E69FF-8A94-483B-A8B6-CEC33BA004A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45436DE-E784-4F72-AB20-FEB61C684691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45436DE-E784-4F72-AB20-FEB61C684691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45436DE-E784-4F72-AB20-FEB61C684691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45436DE-E784-4F72-AB20-FEB61C684691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F24E43A8-F8C3-431F-9E86-A6724CDE6CED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F24E43A8-F8C3-431F-9E86-A6724CDE6CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F24E43A8-F8C3-431F-9E86-A6724CDE6CED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F24E43A8-F8C3-431F-9E86-A6724CDE6CED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

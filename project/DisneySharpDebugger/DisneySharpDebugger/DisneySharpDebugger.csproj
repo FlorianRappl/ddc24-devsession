@@ -1,0 +1,15 @@
+<Project Sdk="Piral.Blazor.Sdk/0.4.1">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<AppShell>C:\Users\florian\source\repos\DisneySharp\DisneySharp\bin\Release\net8.0\publish</AppShell>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\..\DisneySharpCatalog\DisneySharpCatalog\DisneySharpCatalog.csproj" />
+    <ProjectReference Include="..\..\DisneySharpSearch\DisneySharpSearch\DisneySharpSearch.csproj" />
+  </ItemGroup>
+
+</Project>
