@@ -1,0 +1,194 @@
+﻿@page "/tv-shows/{Id}"
+
+@inject IHttpClientFactory http
+
+<section class="container">
+    <div class="back">
+        <a class="btn" href="/tv-shows">Back To TV Shows</a>
+    </div>
+    <div id="details">
+        @if (item is not null)
+        {
+            <div style="background-image: url(https://image.tmdb.org/t/p/original/@(item.backdrop_path))" class="backdrop"></div>
+            <div>
+                <div class="details-top">
+                    <div>
+                        <img src="https://image.tmdb.org/t/p/w500@(item.poster_path)"
+                        class="card-img-top"
+                        alt="@item.name" />
+                    </div>
+                    <div>
+                        <h2>@item.name</h2>
+                        <p>
+                            <i class="fas fa-star text-primary"></i>
+                            @item.vote_average / 10
+                        </p>
+                        <p class="text-muted">Last Air Date: @item.last_air_date</p>
+                        <p>
+                            @item.overview
+                        </p>
+                        <h5>Genres</h5>
+                        <ul class="list-group">
+                            @foreach (var genre in item.genres)
+                            {
+                                <li>@genre.name</li>
+                            }
+                        </ul>
+                        <a href="@item.homepage" target="_blank" class="btn">Visit Show Homepage</a>
+                    </div>
+                </div>
+                <div class="details-bottom">
+                    <h2>Show Info</h2>
+                    <ul>
+                        <li><span class="text-secondary">Number of Episodes:</span> @item.number_of_episodes</li>
+                        <li><span class="text-secondary">Last Episode To Air:</span> @item.last_episode_to_air.name</li>
+                        <li><span class="text-secondary">Status:</span> @item.status</li>
+                    </ul>
+                    <h4>Production Companies</h4>
+                    <div class="list-group">
+                        @foreach (var company in item.production_companies)
+                        {
+                            <span>@company.name</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private TvShowItem item;
+
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var key = "3fd2be6f0c70a2a598f084ddfb75487c";
+        var url = $"https://api.themoviedb.org/3/tv/{Id}?api_key={key}&language=en-US";
+        var client = http.CreateClient();
+
+        item = await client.GetFromJsonAsync<TvShowItem>(url);
+
+        await base.OnInitializedAsync();
+    }
+
+    class GenreInfo
+    {
+
+        public int id { get; set; }
+
+
+        public string name { get; set; }
+    }
+
+    class TvShowProduction
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string logo_path { get; set; }
+
+        public string origin_country { get; set; }
+    }
+
+    class TvShowCreator
+    {
+        public int id { get; set; }
+
+        public int gender { get; set; }
+
+        public string credit_id { get; set; }
+
+        public string name { get; set; }
+
+        public string original_name { get; set; }
+    }
+
+    class TvShowEpisode
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string overview { get; set; }
+
+        public string air_date { get; set; }
+
+        public string episode_type { get; set; }
+
+        public string still_path { get; set; }
+
+        public int season_number { get; set; }
+
+        public int show_id { get; set; }
+
+        public double vote_average { get; set; }
+
+        public int vote_count { get; set; }
+
+        public int episode_number { get; set; }
+    }
+
+    class TvShowItem
+    {
+        public bool adult { get; set; }
+
+        public string backdrop_path { get; set; }
+
+        public List<TvShowCreator> created_by { get; set; }
+
+        public List<int> episode_run_time { get; set; }
+
+        public string first_air_date { get; set; }
+
+        public string last_air_date { get; set; }
+
+        public List<GenreInfo> genres { get; set; }
+
+        public List<TvShowCreator> production_companies { get; set; }
+
+        public TvShowEpisode last_episode_to_air { get; set; }
+
+        public TvShowEpisode next_episode_to_air { get; set; }
+
+        public int id { get; set; }
+
+        public string original_language { get; set; }
+
+        public string original_title { get; set; }
+
+        public string overview { get; set; }
+
+        public string poster_path { get; set; }
+
+        public string name { get; set; }
+
+        public string status { get; set; }
+
+        public string homepage { get; set; }
+
+        public string release_date { get; set; }
+
+        public string type { get; set; }
+
+        public double popularity { get; set; }
+
+        public double vote_average { get; set; }
+
+        public int number_of_episodes { get; set; }
+
+        public int vote_count { get; set; }
+
+        public int revenue { get; set; }
+
+        public int runtime { get; set; }
+
+        public bool video { get; set; }
+
+        public bool in_production { get; set; }
+
+    }
+}

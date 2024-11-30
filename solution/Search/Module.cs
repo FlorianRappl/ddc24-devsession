@@ -14,7 +14,16 @@ public class Module : IMfModule
 
     public Task Setup(IMfAppService app)
     {
-        // Register components and more
+        app.AppendScript("scroll.js");
+
+        app.MapComponent<SearchFragment>("search");
+        app.MapRoute<SearchPage>();
+
+#if DEBUG
+        app.MapComponent<SearchHelperLink>("nav");
+        app.MapRoute<SearchHelperPage>();
+#endif
+
         return Task.CompletedTask;
     }
 

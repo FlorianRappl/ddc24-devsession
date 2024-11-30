@@ -49,9 +49,9 @@
 }
 
 @code {
-    bool loading = true;
-    List<MovieItem> nowPlaying = new();
-    List<MovieItem> popular = new();
+    private bool loading = true;
+    private List<MovieItem> nowPlaying = new();
+    private List<MovieItem> popular = new();
 
     async Task LoadData()
     {

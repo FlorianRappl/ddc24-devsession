@@ -1,0 +1,39 @@
+﻿@inject NavigationManager NavManager
+
+<section class="search">
+    <div class="container">
+        <div id="alert"></div>
+        <form class="search-form" @onsubmit="@TriggerSearch">
+            <div class="search-radio">
+                <input type="radio" id="movie" name="type" value="movie" checked="@(SearchType == "movie")" @onchange="@(() => SearchType = "movie")" />
+                <label for="movies">Movies</label>
+                <input type="radio" id="tv" name="type" value="tv" checked="@(SearchType == "tv")" @onchange="@(() => SearchType = "tv")" />
+                <label for="shows">TV Shows</label>
+            </div>
+            <div class="search-flex">
+                <input type="text"
+                       name="search-term"
+                       id="search-term"
+                       value="@SearchQuery"
+                       @onchange="@((e) => SearchQuery = (string)e.Value!)"
+                       placeholder="Enter search term" />
+                <button class="btn" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public string SearchType { get; set; } = "movie";
+
+    [Parameter]
+    public string SearchQuery { get; set; } = string.Empty;
+
+    public void TriggerSearch()
+    {
+        NavManager.NavigateTo($"/search/{SearchType}?q={SearchQuery}");
+    }
+}

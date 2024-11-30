@@ -1,0 +1,164 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.JSInterop
+
+@implements IDisposable
+
+@page "/search/{Type}"
+
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavManager
+@inject IHttpClientFactory http
+
+<Piral.Blazor.Shared.MfComponent Name="search" SearchType="@Type" SearchQuery="@q" />
+
+<section id="search-results-wrapper" class="container">
+    <heading id="search-results-heading">
+        <h2>@(results.Count) of @(totalResults) Results for @(q)</h2>
+    </heading>
+    <div id="search-results" class="grid">
+        @foreach (var item in results)
+        {
+            <div class="card">
+                <a href="@(Type == "movie" ? "movies": "tv-shows")/@(item.id)}">
+                    <img src="https://image.tmdb.org/t/p/w500@(item.poster_path)}"
+                         class="card-img-top"
+                         alt="@(Type == "movie" ? item.title : item.name)" />
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@(Type == "movie" ? item.title : item.name)</h5>
+                    <p class="card-text">
+                        <small class="text-muted">Release: @(Type == "movie" ? item.release_date : item.first_air_date)</small>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="pagination">
+        <div class="pagination">
+            <button class="btn btn-primary" id="prev" @onclick="@PrevPage">Prev</button>
+            <button class="btn btn-primary" id="next" @onclick="@NextPage">Next</button>
+            <div class="page-counter">Page @currentPage of @maxPage</div>
+        </div>
+    </div>
+</section>
+
+@if (loading)
+{
+    <Spinner />
+}
+
+@code {
+    [Parameter]
+    public string Type { get; set; } = "movie";
+
+    private string q = string.Empty;
+    private List<SearchItem> results = new();
+    private int currentPage = 1;
+    private int maxPage = 1;
+    private int totalResults = 0;
+    private bool loading = false;
+
+    protected override void OnInitialized()
+    {
+        _ = Search(1);
+        NavManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private void NextPage()
+    {
+        if (currentPage < maxPage)
+        {
+            _ = Search(currentPage + 1);
+            _ = JsRuntime.InvokeVoidAsync("scrollToTop");
+        }
+    }
+
+    private void PrevPage()
+    {
+        if (currentPage > 1)
+        {
+            _ = Search(currentPage - 1);
+            _ = JsRuntime.InvokeVoidAsync("ScrollToTop");
+        }
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _ = Search(1);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= HandleLocationChanged;
+    }
+
+    public async Task Search(int page)
+    {
+        loading = true;
+        NavManager.GetSearchQuery(out q);
+        var client = http.CreateClient();
+        var key = "3fd2be6f0c70a2a598f084ddfb75487c";
+        var url = $"https://api.themoviedb.org/3/search/{Type}?api_key={key}&language=en-US&query={q}&page={page}";
+
+        var response = await client.GetFromJsonAsync<SearchData>(url);
+
+        await this.InvokeAsync(() =>
+        {
+            loading = false;
+            results = response.results;
+            currentPage = response.page;
+            totalResults = response.total_results;
+            maxPage = response.total_pages;
+            this.StateHasChanged();
+        });
+    }
+
+    class SearchItem
+    {
+        public bool adult { get; set; }
+
+        public string backdrop_path { get; set; }
+
+        public List<int> genre_ids { get; set; }
+
+        public int id { get; set; }
+
+        public string original_language { get; set; }
+
+        public string original_title { get; set; }
+
+        public string overview { get; set; }
+
+        public string poster_path { get; set; }
+
+        public string title { get; set; }
+
+        public string name { get; set; }
+
+        public string release_date { get; set; }
+
+        public string first_air_date { get; set; }
+
+        public double popularity { get; set; }
+
+        public double vote_average { get; set; }
+
+        public int vote_count { get; set; }
+
+        public bool video { get; set; }
+
+    }
+
+    class SearchData
+    {
+        public List<SearchItem> results { get; set; }
+
+        public int total_pages { get; set; }
+
+        public int page { get; set; }
+
+        public int total_results { get; set; }
+    }
+}

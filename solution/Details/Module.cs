@@ -14,7 +14,9 @@ public class Module : IMfModule
 
     public Task Setup(IMfAppService app)
     {
-        // Register components and more
+        app.MapRoute<MovieDetailsPage>();
+        app.MapRoute<TvShowDetailsPage>();
+
         return Task.CompletedTask;
     }
 
